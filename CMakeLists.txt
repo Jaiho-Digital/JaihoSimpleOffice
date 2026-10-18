@@ -80,3 +80,51 @@ set_target_properties(SimpleNotes PROPERTIES
 install(TARGETS SimpleNotes
     RUNTIME DESTINATION .
 )
+
+# ---------------- SimpleCalculator ----------------
+
+qt_add_executable(SimpleCalculator
+    apps/SimpleCalculator/src/main.cpp
+)
+
+qt_add_qml_module(SimpleCalculator
+    URI Jaiho.SimpleCalculator
+    VERSION 1.0
+    QML_FILES
+        apps/SimpleCalculator/qml/Main.qml
+)
+
+target_link_libraries(SimpleCalculator PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Qml
+    Qt6::Quick
+)
+
+set_target_properties(SimpleCalculator PROPERTIES
+    WIN32_EXECUTABLE TRUE
+)
+
+if(WIN32)
+    set(CALCULATOR_ICON
+        "${CMAKE_CURRENT_SOURCE_DIR}/apps/SimpleCalculator/assets/SimpleCalculator.ico"
+    )
+
+    if(EXISTS "${CALCULATOR_ICON}")
+        file(TO_CMAKE_PATH "${CALCULATOR_ICON}" CALCULATOR_ICON_PATH)
+
+        file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/SimpleCalculator.rc"
+            "IDI_ICON1 ICON \"${CALCULATOR_ICON_PATH}\"\n"
+        )
+
+        target_sources(SimpleCalculator PRIVATE
+            "${CMAKE_CURRENT_BINARY_DIR}/SimpleCalculator.rc"
+        )
+    else()
+        message(WARNING "SimpleCalculator.ico not found.")
+    endif()
+endif()
+
+install(TARGETS SimpleCalculator
+    RUNTIME DESTINATION .
+)
