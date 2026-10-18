@@ -128,3 +128,43 @@ endif()
 install(TARGETS SimpleCalculator
     RUNTIME DESTINATION .
 )
+
+# ---------------- SimpleConvert ----------------
+
+qt_add_executable(SimpleConvert
+    apps/SimpleConvert/src/main.cpp
+)
+
+qt_add_qml_module(SimpleConvert
+    URI Jaiho.SimpleConvert
+    VERSION 1.0
+    QML_FILES
+        apps/SimpleConvert/qml/Main.qml
+)
+
+target_link_libraries(SimpleConvert PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Qml
+    Qt6::Quick
+)
+
+set_target_properties(SimpleConvert PROPERTIES
+    WIN32_EXECUTABLE TRUE
+)
+
+install(TARGETS SimpleConvert
+    RUNTIME DESTINATION .
+)
+
+# SimpleConvert Windows application icon
+if(WIN32 AND TARGET SimpleConvert)
+    set(SIMPLECONVERT_ICON_PATH "${CMAKE_CURRENT_SOURCE_DIR}/apps/SimpleConvert/assets/SimpleConvert.ico")
+    if(EXISTS "${SIMPLECONVERT_ICON_PATH}")
+        file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/SimpleConvert.rc"
+            "IDI_ICON1 ICON \"${SIMPLECONVERT_ICON_PATH}\"\n")
+        target_sources(SimpleConvert PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/SimpleConvert.rc")
+    else()
+        message(FATAL_ERROR "SimpleConvert icon not found: ${SIMPLECONVERT_ICON_PATH}")
+    endif()
+endif()
