@@ -168,3 +168,47 @@ if(WIN32 AND TARGET SimpleConvert)
         message(FATAL_ERROR "SimpleConvert icon not found: ${SIMPLECONVERT_ICON_PATH}")
     endif()
 endif()
+
+# ---------------- SimpleCalendar ----------------
+
+qt_add_executable(SimpleCalendar
+    apps/SimpleCalendar/src/main.cpp
+)
+
+qt_add_qml_module(SimpleCalendar
+    URI Jaiho.SimpleCalendar
+    VERSION 1.0
+    QML_FILES
+        apps/SimpleCalendar/qml/Main.qml
+)
+
+target_link_libraries(SimpleCalendar PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Qml
+    Qt6::Quick
+)
+
+set_target_properties(SimpleCalendar PROPERTIES
+    WIN32_EXECUTABLE TRUE
+)
+
+install(TARGETS SimpleCalendar
+    RUNTIME DESTINATION .
+)
+
+# SimpleCalendar Windows application icon
+if(WIN32 AND TARGET SimpleCalendar)
+    enable_language(RC)
+    set(SIMPLECALENDAR_ICON_PATH
+        "${CMAKE_CURRENT_SOURCE_DIR}/apps/SimpleCalendar/assets/SimpleCalendar.ico")
+    if(EXISTS "${SIMPLECALENDAR_ICON_PATH}")
+        file(TO_CMAKE_PATH "${SIMPLECALENDAR_ICON_PATH}" SIMPLECALENDAR_ICON_RESOURCE)
+        file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/SimpleCalendar.rc"
+            "IDI_ICON1 ICON \"${SIMPLECALENDAR_ICON_RESOURCE}\"\n")
+        target_sources(SimpleCalendar PRIVATE
+            "${CMAKE_CURRENT_BINARY_DIR}/SimpleCalendar.rc")
+    else()
+        message(FATAL_ERROR "SimpleCalendar icon not found.")
+    endif()
+endif()
