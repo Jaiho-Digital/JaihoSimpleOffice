@@ -1,4 +1,4 @@
-
+﻿
 cmake_minimum_required(VERSION 3.21)
 
 project(JaihoSimpleOffice
@@ -212,3 +212,31 @@ if(WIN32 AND TARGET SimpleCalendar)
         message(FATAL_ERROR "SimpleCalendar icon not found.")
     endif()
 endif()
+
+
+# ---------------- SimpleFocus ----------------
+qt_add_executable(SimpleFocus
+    apps/SimpleFocus/src/main.cpp
+)
+
+qt_add_qml_module(SimpleFocus
+    URI Jaiho.SimpleFocus
+    VERSION 1.0
+    QML_FILES
+        apps/SimpleFocus/qml/Main.qml
+)
+
+target_link_libraries(SimpleFocus PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Qml
+    Qt6::Quick
+)
+
+set_target_properties(SimpleFocus PROPERTIES
+    WIN32_EXECUTABLE TRUE
+)
+
+install(TARGETS SimpleFocus
+    RUNTIME DESTINATION .
+)
